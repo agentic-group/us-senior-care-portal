@@ -1,146 +1,142 @@
 {
-  "name": "US Senior Care Facility Finder",
-  "slug": "us-senior-care",
-  "host": "senior-care.navi-index.com",
-  "tagline": "Nursing homes, home health, hospice and senior care facilities by state and city",
-  "description": "Find nursing homes, home health agencies, hospices, palliative care programs, adult care homes, state veterans homes and community health centers in every US state, with CMS star ratings, staffing, beds, penalties, address and phone from public sources.",
-  "item_type": "One row per care facility or provider: care type, city, state, address, phone and the values its source publishes (CMS ratings and penalties for nursing homes, services for home health and hospice agencies, licensed beds for adult care homes).",
-  "type_noun": "Care facility",
-  "keyword": "nursing homes near me",
-  "jsonld_item_type": "MedicalBusiness",
-  "ga4_measurement_id": "G-VN3YP36D7X",
-  "ga4_property": "properties/557614260",
-  "indexnow_key": "9f990eff8754b320e6aaf7e09c408762",
-  "operator": "Agentic, Inc.",
-  "operator_legal_name": "Agentic, Inc.",
-  "operator_url": "https://agentic-company.net/",
-  "operator_corporate_number": "6011201027255",
-  "operator_entity": "https://houjin.rootteam.co.jp/canonical/companies/jp_nta_6011201027255",
-  "lang": "en",
-  "license": "https://creativecommons.org/licenses/by/4.0/",
-  "siblings": [
-    {
-      "name": "US Portal Atlas",
-      "url": "https://atlas.navi-index.com/"
-    },
-    {
-      "name": "外壁塗装ナビ",
-      "url": "https://gaiheki.gyosha-guide.com/"
-    }
+ "name": "US Senior Care Facility Finder",
+ "slug": "us-senior-care",
+ "host": "senior-care.navi-index.com",
+ "tagline": "Nursing homes, home health, hospice and senior care facilities by state and city",
+ "description": "Find nursing homes, home health agencies, hospices, palliative care programs, adult care homes, state veterans homes and community health centers in every US state, with CMS star ratings, staffing, beds, penalties, address and phone from public sources.",
+ "item_type": "One row per care facility or provider: care type, city, state, address, phone and the values its source publishes (CMS ratings and penalties for nursing homes, services for home health and hospice agencies, licensed beds for adult care homes).",
+ "type_noun": "Care facility",
+ "keyword": "nursing homes near me",
+ "jsonld_item_type": "MedicalBusiness",
+ "ga4_measurement_id": "G-VN3YP36D7X",
+ "ga4_property": "properties/557614260",
+ "indexnow_key": "9f990eff8754b320e6aaf7e09c408762",
+ "operator": "Agentic, Inc.",
+ "operator_legal_name": "Agentic, Inc.",
+ "operator_url": "https://agentic-company.net/",
+ "operator_corporate_number": "6011201027255",
+ "operator_entity": "https://houjin.rootteam.co.jp/canonical/companies/jp_nta_6011201027255",
+ "lang": "en",
+ "license": "https://creativecommons.org/licenses/by/4.0/",
+ "siblings": [
+  {
+   "name": "US Portal Atlas",
+   "url": "https://atlas.navi-index.com/"
+  }
+ ],
+ "answer": {
+  "question": "Which nursing homes, home health agencies, hospices and other senior care providers are near me, how are they rated, and how do I contact them?",
+  "fields": [
+   "Care type",
+   "City",
+   "State",
+   "Address",
+   "Phone",
+   "CMS overall star rating",
+   "Certified beds",
+   "Services"
   ],
-  "answer": {
-    "question": "Which nursing homes, home health agencies, hospices and other senior care providers are near me, how are they rated, and how do I contact them?",
-    "fields": [
-      "Care type",
-      "City",
-      "State",
-      "Address",
-      "Phone",
-      "CMS overall star rating",
-      "Certified beds",
-      "Services"
-    ],
-    "source_url": "https://data.cms.gov/provider-data/dataset/4pq5-n9py"
+  "source_url": "https://data.cms.gov/provider-data/dataset/4pq5-n9py"
+ },
+ "facets": [
+  {
+   "key": "type",
+   "label": "Type of care"
   },
-  "facets": [
-    {
-      "key": "type",
-      "label": "Type of care"
-    },
-    {
-      "key": "state",
-      "label": "State"
-    },
-    {
-      "key": "city",
-      "label": "City"
-    }
-  ],
-  "sources": [
-    {
-      "id": "cms-care-compare",
-      "name": "CMS Provider Data Catalog: Nursing Home Provider Information and Penalties",
-      "url": "https://data.cms.gov/provider-data/topics/nursing-home-compare",
-      "license": "ok",
-      "note": "US federal government data (public domain, 17 U.S.C. 105). Star ratings, staffing, beds, ownership and 3-year penalties joined by CCN from datasets 4pq5-n9py and g6vv-u9sr. Retrieved 2026-09-23; first published on the US Portal Atlas."
-    },
-    {
-      "id": "nchcfa",
-      "name": "North Carolina Health Care Facilities Association: Facility Finder",
-      "url": "https://www.nchcfa.org/find-skilled-nursing-care/",
-      "license": "ok",
-      "note": "Facility name, city and ZIP as listed in the association's public facility finder. Retrieved 2026-09-23; first published on the US Portal Atlas."
-    },
-    {
-      "id": "carealabama",
-      "name": "Care of Alabama: Alabama nursing home list",
-      "url": "https://www.carealabama.net/list01_alabama_nursing_homes",
-      "license": "ok",
-      "note": "Facility name, city and county from the public state nursing home list. Retrieved 2026-09-23; first published on the US Portal Atlas."
-    },
-    {
-      "id": "whca",
-      "name": "Washington Health Care Association: Facility Finder",
-      "url": "https://www.whca.org/facility-finder/",
-      "license": "ok",
-      "note": "Facility name, city and ZIP from the public facility finder. Retrieved 2026-09-23; first published on the US Portal Atlas."
-    },
-    {
-      "id": "ncdhhs-acls",
-      "name": "NC Division of Health Service Regulation: adult care home listings",
-      "url": "https://info.ncdhhs.gov/dhsr/acls/faclistings.html",
-      "license": "ok",
-      "note": "North Carolina state government licensure list: city, county and licensed beds. Retrieved 2026-09-28; first published on the US Portal Atlas."
-    },
-    {
-      "id": "nasvh",
-      "name": "National Association of State Veterans Homes: directory",
-      "url": "https://nasvh.org/directory/",
-      "license": "ok",
-      "note": "Phone, address, beds by level of care and official site as published in the public directory. Retrieved 2026-09-23; first published on the US Portal Atlas."
-    },
-    {
-      "id": "carf-ccrc",
-      "name": "CARF International: America's Best Continuing Care Retirement Communities 2026",
-      "url": "https://carf.org/accreditation/programs/aging-services/americas-best-continuing-care-retirement-communities-2026/",
-      "license": "ok",
-      "note": "CARF-accredited CCRCs named in the 2026 list, with city and state. Retrieved 2026-09-23; first published on the US Portal Atlas."
-    },
-    {
-      "id": "allianceforcareathome",
-      "name": "National Alliance for Care at Home: Find a Provider",
-      "url": "https://allianceforcareathome.org/find-a-provider/",
-      "license": "ok",
-      "note": "Services offered and street address as listed in the public provider directory. Retrieved 2026-09-24; first published on the US Portal Atlas."
-    },
-    {
-      "id": "getpalliativecare",
-      "name": "Center to Advance Palliative Care: provider directory",
-      "url": "https://www.capc.org/provider-directory-programs/search/?address=North%20Carolina&facility_type=ltc",
-      "license": "ok",
-      "note": "Palliative care settings, program name, phone and website as listed in the public directory. Retrieved 2026-09-24; first published on the US Portal Atlas."
-    },
-    {
-      "id": "hospice101",
-      "name": "Hospice 101: Florida hospice directory",
-      "url": "https://www.hospice101.com/state/florida",
-      "license": "ok",
-      "note": "Hospice office name and city from the public directory. Retrieved 2026-09-23; first published on the US Portal Atlas."
-    },
-    {
-      "id": "health-ny",
-      "name": "New York State Department of Health: hospice directory",
-      "url": "https://www.health.ny.gov/facilities/hospice/directory.htm",
-      "license": "ok",
-      "note": "New York state government directory: hospice name, city and ZIP. Retrieved 2026-09-23; first published on the US Portal Atlas."
-    },
-    {
-      "id": "hrsa-health-centers",
-      "name": "HRSA Health Center Program directory",
-      "url": "https://data.hrsa.gov/topics/health-centers",
-      "license": "ok",
-      "note": "US federal government data (public domain). Health Center Program grantees with city and state. Retrieved 2026-09-24; first published on the US Portal Atlas."
-    }
-  ],
-  "moved_from": "https://atlas.navi-index.com/ (rows with these source ids, 2026-10-06)"
+  {
+   "key": "state",
+   "label": "State"
+  },
+  {
+   "key": "city",
+   "label": "City"
+  }
+ ],
+ "sources": [
+  {
+   "id": "cms-care-compare",
+   "name": "CMS Provider Data Catalog: Nursing Home Provider Information and Penalties",
+   "url": "https://data.cms.gov/provider-data/topics/nursing-home-compare",
+   "license": "ok",
+   "note": "US federal government data (public domain, 17 U.S.C. 105). Star ratings, staffing, beds, ownership and 3-year penalties joined by CCN from datasets 4pq5-n9py and g6vv-u9sr. Retrieved 2026-09-23; first published on the US Portal Atlas."
+  },
+  {
+   "id": "nchcfa",
+   "name": "North Carolina Health Care Facilities Association: Facility Finder",
+   "url": "https://www.nchcfa.org/find-skilled-nursing-care/",
+   "license": "ok",
+   "note": "Facility name, city and ZIP as listed in the association's public facility finder. Retrieved 2026-09-23; first published on the US Portal Atlas."
+  },
+  {
+   "id": "carealabama",
+   "name": "Care of Alabama: Alabama nursing home list",
+   "url": "https://www.carealabama.net/list01_alabama_nursing_homes",
+   "license": "ok",
+   "note": "Facility name, city and county from the public state nursing home list. Retrieved 2026-09-23; first published on the US Portal Atlas."
+  },
+  {
+   "id": "whca",
+   "name": "Washington Health Care Association: Facility Finder",
+   "url": "https://www.whca.org/facility-finder/",
+   "license": "ok",
+   "note": "Facility name, city and ZIP from the public facility finder. Retrieved 2026-09-23; first published on the US Portal Atlas."
+  },
+  {
+   "id": "ncdhhs-acls",
+   "name": "NC Division of Health Service Regulation: adult care home listings",
+   "url": "https://info.ncdhhs.gov/dhsr/acls/faclistings.html",
+   "license": "ok",
+   "note": "North Carolina state government licensure list: city, county and licensed beds. Retrieved 2026-09-28; first published on the US Portal Atlas."
+  },
+  {
+   "id": "nasvh",
+   "name": "National Association of State Veterans Homes: directory",
+   "url": "https://nasvh.org/directory/",
+   "license": "ok",
+   "note": "Phone, address, beds by level of care and official site as published in the public directory. Retrieved 2026-09-23; first published on the US Portal Atlas."
+  },
+  {
+   "id": "carf-ccrc",
+   "name": "CARF International: America's Best Continuing Care Retirement Communities 2026",
+   "url": "https://carf.org/accreditation/programs/aging-services/americas-best-continuing-care-retirement-communities-2026/",
+   "license": "ok",
+   "note": "CARF-accredited CCRCs named in the 2026 list, with city and state. Retrieved 2026-09-23; first published on the US Portal Atlas."
+  },
+  {
+   "id": "allianceforcareathome",
+   "name": "National Alliance for Care at Home: Find a Provider",
+   "url": "https://allianceforcareathome.org/find-a-provider/",
+   "license": "ok",
+   "note": "Services offered and street address as listed in the public provider directory. Retrieved 2026-09-24; first published on the US Portal Atlas."
+  },
+  {
+   "id": "getpalliativecare",
+   "name": "Center to Advance Palliative Care: provider directory",
+   "url": "https://www.capc.org/provider-directory-programs/search/?address=North%20Carolina&facility_type=ltc",
+   "license": "ok",
+   "note": "Palliative care settings, program name, phone and website as listed in the public directory. Retrieved 2026-09-24; first published on the US Portal Atlas."
+  },
+  {
+   "id": "hospice101",
+   "name": "Hospice 101: Florida hospice directory",
+   "url": "https://www.hospice101.com/state/florida",
+   "license": "ok",
+   "note": "Hospice office name and city from the public directory. Retrieved 2026-09-23; first published on the US Portal Atlas."
+  },
+  {
+   "id": "health-ny",
+   "name": "New York State Department of Health: hospice directory",
+   "url": "https://www.health.ny.gov/facilities/hospice/directory.htm",
+   "license": "ok",
+   "note": "New York state government directory: hospice name, city and ZIP. Retrieved 2026-09-23; first published on the US Portal Atlas."
+  },
+  {
+   "id": "hrsa-health-centers",
+   "name": "HRSA Health Center Program directory",
+   "url": "https://data.hrsa.gov/topics/health-centers",
+   "license": "ok",
+   "note": "US federal government data (public domain). Health Center Program grantees with city and state. Retrieved 2026-09-24; first published on the US Portal Atlas."
+  }
+ ],
+ "moved_from": "https://atlas.navi-index.com/ (rows with these source ids, 2026-10-06)"
 }
