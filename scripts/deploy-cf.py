@@ -168,6 +168,8 @@ def sitemap_paths(base, host, path="/sitemap.xml", seen=None):
     for loc in re.findall(r"<loc>([^<]+)</loc>", b.decode("utf-8", "replace")):
         p = urllib.parse.urlparse(loc.strip()).path or "/"
         if p.endswith(".xml"):
+            # 子の sitemap 自体も asset に置く（置かないと本番の /sitemaps/*.xml が 404 になる・2026-10-06 実測）
+            out.append(p)
             out += sitemap_paths(base, host, p, seen)
         else:
             out.append(p)
