@@ -1,0 +1,20 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run validate
+      - name: Smoke test every page type
+        run: |
+          PORT=4517 node server.js & sleep 3
+          for p in / /page/2/ /type/nursing-homes/ /state/ohio/ /state/ohio/nursing-homes/ /city/columbus-oh/ /about/ /sitemap.xml /robots.txt /llms.txt "/api/items?limit=1" /api/collection-status; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:4517$p"); echo "$code $p"; test "$code" = 200
+          done

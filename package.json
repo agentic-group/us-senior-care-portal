@@ -1,0 +1,11 @@
+{
+  "name": "us-senior-care-portal",
+  "private": true,
+  "description": "US Senior Care Facility Finder (senior-care.navi-index.com): nursing homes, home health, hospice and senior care facilities by state and city",
+  "scripts": {
+    "start": "node server.js",
+    "validate": "node scripts/validate.mjs && node scripts/english-only.mjs",
+    "import": "python3 scripts/import-atlas.py ../us-portal-atlas"
+  },
+  "engines": { "node": ">=20" }
+}
