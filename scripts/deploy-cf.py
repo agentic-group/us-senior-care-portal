@@ -144,7 +144,7 @@ def free_port():
 
 
 def fetch(base, path):
-    req = urllib.request.Request(base + path, headers={"User-Agent": "cf-deploy", "Accept-Encoding": "identity"})
+    req = urllib.request.Request(base + path, headers={"User-Agent": "cf-deploy", "Accept-Encoding": "identity", "Cache-Control": "no-cache"})
     try:
         r = urllib.request.urlopen(req, timeout=60)
         return r.status, r.headers.get("content-type"), r.read()
