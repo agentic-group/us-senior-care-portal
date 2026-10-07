@@ -36,6 +36,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+_SELF_SRC = pathlib.Path(__file__).read_bytes()  # 起動時の自分の中身（取り直し後と比べて走り直すため）
 sys.path.insert(0, os.environ.get("GRANTRY_MCP_DIR", "/workspace/agent-loop"))
 from grantry_mcp import Grantry  # noqa: E402
 
@@ -144,7 +145,7 @@ def free_port():
 
 
 def fetch(base, path):
-    req = urllib.request.Request(base + path, headers={"User-Agent": "cf-deploy", "Accept-Encoding": "identity"})
+    req = urllib.request.Request(base + path, headers={"User-Agent": "cf-deploy", "Accept-Encoding": "identity", "Cache-Control": "no-cache"})
     try:
         r = urllib.request.urlopen(req, timeout=60)
         return r.status, r.headers.get("content-type"), r.read()
@@ -347,7 +348,8 @@ def main():
     # /api/collection-status 無しの Worker を本番に置いた）。取ってきた main 側の自分で走り直す
     mine = pathlib.Path(__file__).resolve()
     fetched = (d / "scripts" / "deploy-cf.py").resolve()
-    if os.environ.get("CF_DEPLOY_REEXEC") != "1" and mine != fetched and fetched.exists():
+    # 同じ置き場所で走っていても、取り直しで中身が変わったら新しい版で走り直す（2026-10-07 butsudan: 直した直後の 1 回目が旧版のまま 1101）
+    if os.environ.get("CF_DEPLOY_REEXEC") != "1" and fetched.exists() and (mine != fetched or fetched.read_bytes() != _SELF_SRC):
         r = subprocess.run([sys.executable, str(fetched), *sys.argv[1:]], env={**os.environ, "CF_DEPLOY_REEXEC": "1"})
         raise SystemExit(r.returncode)
     head = sh(["git", "-C", str(d), "rev-parse", "HEAD"]).stdout.strip()
