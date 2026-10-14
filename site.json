@@ -136,6 +136,27 @@
    "url": "https://data.hrsa.gov/topics/health-centers",
    "license": "ok",
    "note": "US federal government data (public domain). Health Center Program grantees with city and state. Retrieved 2026-09-24; first published on the US Portal Atlas."
+  },
+  {
+   "id": "cms-snf-cost-report",
+   "name": "CMS Skilled Nursing Facility Cost Report (FY 2023 and FY 2024 public use files)",
+   "url": "https://data.cms.gov/provider-compliance/cost-report/skilled-nursing-facility-cost-report",
+   "license": "ok",
+   "note": "US federal government data (public domain, 17 U.S.C. 105). Cost, net revenue and gross charges per resident day per facility, joined by CCN; state and metro medians on /cost/. Retrieved 2026-10-14."
+  },
+  {
+   "id": "cms-hha-cost-report",
+   "name": "CMS Home Health Agency Cost Report (2024 public use file)",
+   "url": "https://data.cms.gov/provider-compliance/cost-report/home-health-agency-cost-report",
+   "license": "ok",
+   "note": "US federal government data (public domain). Cost per visit (all, RN, home health aide), state medians. Retrieved 2026-10-14."
+  },
+  {
+   "id": "macpac-nf-rates",
+   "name": "MACPAC: Estimates of Medicaid Nursing Facility Payments Relative to Costs (2023), Table A-1",
+   "url": "https://www.macpac.gov/publication/estimates-of-medicaid-nursing-facility-payments-relative-to-costs/",
+   "license": "ok",
+   "note": "Work of a US federal legislative-branch commission (public domain). Average Medicaid base payment per resident day by state, 2019 data. Retrieved 2026-10-14."
   }
  ],
  "moved_from": "https://atlas.navi-index.com/ (rows with these source ids, 2026-10-06)"
