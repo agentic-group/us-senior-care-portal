@@ -24,7 +24,11 @@ python3 scripts/import-atlas.py <us-portal-atlas checkout>   # rebuild data/item
 
 `/` (types, states, all rows), `/type/<type>/`, `/state/<state>/`, `/state/<state>/<type>/`, `/city/<city>-<st>/`,
 `/items/<slug>/`, `/about/`, `/sitemap.xml` (index), `/robots.txt` (training disallowed, search allowed), `/llms.txt`,
-`/api/items` (type, state, city, q, limit, offset), `/api/collection-status`. Pagination is a real path (`/page/N/`).
+`/api/items` (type, state, city, q, limit, offset), `/api/collection-status`, `/cost/` and `/cost/<state>/`
+(nursing home cost per day/month by state, metro (CBSA) and facility; Medicaid daily rate; home health cost per visit).
+Cost data: `python3 scripts/build-costs.py` rebuilds `data/costs.json` from the CMS SNF and HHA cost reports;
+`data/medicaid-nf-rates.json` is MACPAC Table A-1 (2019). Cost-report values are all-payer, all-room averages, not quoted room rates.
+Assisted living and private-pay home care prices are not in public data; Genworth and similar surveys are not reproduced. Pagination is a real path (`/page/N/`).
 
 ## Deploy (Cloudflare, not Contabo)
 

@@ -58,6 +58,73 @@ const itemUrl = (r) => `/items/${r.slug}/`;
 const sortedKeys = (m) => [...m.keys()].sort((a, b) => a.localeCompare(b));
 const byCount = (m) => [...m.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
 
+
+// ---------- costs (data/costs.json, built by scripts/build-costs.py from CMS cost reports + MACPAC) ----------
+let C = null;
+function costs() {
+  const p = path.join(ROOT, "data", "costs.json");
+  if (!fs.existsSync(p)) return null;
+  const mt = fs.statSync(p).mtimeMs;
+  if (C && C.mt === mt) return C;
+  C = { mt, ...JSON.parse(fs.readFileSync(p, "utf8")) };
+  return C;
+}
+const usd = (v, d = 0) => (v == null ? "n/a" : "$" + Number(v).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }));
+const MONTH = 365 / 12;
+const costUrl = (s) => (s ? `/cost/${slugify(s)}/` : "/cost/");
+const costDefs = () => `<p class="src">How to read these numbers: <strong>cost per day</strong> is total operating expense divided by total resident days in each facility's Medicare cost report (all payers, all rooms);
+<strong>revenue per day</strong> is net patient revenue (what the facility collected after payer discounts) per resident day; <strong>charge per day</strong> is gross charges (list prices before discounts) per resident day.
+Monthly = per day × 30.4. The cost reports do not split private and semi-private rooms, so a private room usually costs more than the facility median shown here.
+State and metro figures are medians across facilities. The <strong>Medicaid rate</strong> is the average Medicaid fee-for-service base payment per resident day by state (MACPAC, 2019 data; Alaska, Idaho and New Hampshire not reported).</p>`;
+function costSources(c) {
+  const s = c.sources;
+  return `<h2>Sources</h2><ul class="src"><li><a href="${esc(s.snf.url)}" rel="nofollow" data-outbound>${esc(s.snf.name)}</a> (US federal government data, public domain; retrieved ${esc(c.retrieved)})</li>
+<li><a href="${esc(s.hha.url)}" rel="nofollow" data-outbound>${esc(s.hha.name)}</a> (public domain; retrieved ${esc(c.retrieved)})</li>
+<li><a href="${esc(s.medicaid.url)}" rel="nofollow" data-outbound>${esc(s.medicaid.name)}</a> (retrieved ${esc(c.retrieved)})</li></ul>`;
+}
+function costLd(name, url, props) {
+  const c = costs();
+  return { "@context": "https://schema.org", "@type": "Dataset", name, url: BASE + url, license: site.license, dateModified: c.retrieved,
+    creator: { "@type": "Organization", name: site.operator, url: site.operator_url },
+    isBasedOn: [c.sources.snf.url, c.sources.hha.url, c.sources.medicaid.url],
+    variableMeasured: props.filter(([, v]) => v != null).map(([n, v, u]) => ({ "@type": "PropertyValue", name: n, value: v, unitText: u || "USD" })) };
+}
+function costHome() {
+  const c = costs(); const n = c.national;
+  const rows = Object.entries(c.states).filter(([, s]) => s.facilities);
+  const body = `<p><strong>The median US nursing home spends ${usd(n.median_cost_per_day)} per resident day (about ${usd(n.median_cost_per_day * MONTH)} a month) and collects ${usd(n.median_revenue_per_day)} per day; its list charge is ${usd(n.median_charge_per_day)} per day (about ${usd(n.median_charge_per_day * MONTH)} a month).</strong>
+These are medians of ${n.facilities.toLocaleString("en-US")} facilities' own CMS cost reports (FY 2023–2024). Medicaid pays nursing homes ${usd(n.medicaid.medicaid_base_payment_per_day, 2)} per day on average (MACPAC, 2019). A home health visit costs agencies a median ${usd(n.home_health.median_cost_per_visit)} (${n.home_health.agencies.toLocaleString("en-US")} agencies).</p>
+<h2>Nursing home cost by state</h2><div class="wrap"><table><thead><tr><th>State</th><th>Facilities</th><th>Cost per day</th><th>Cost per month</th><th>Charge per day</th><th>Medicaid rate per day</th><th>Home health cost per visit</th></tr></thead><tbody>
+${rows.map(([st, s]) => `<tr><td><a href="${costUrl(st)}">${esc(st)}</a></td><td>${s.facilities}</td><td>${usd(s.median_cost_per_day)}</td><td>${usd(s.median_cost_per_day * MONTH)}</td><td>${usd(s.median_charge_per_day)}</td><td>${s.medicaid ? usd(s.medicaid.medicaid_base_payment_per_day, 2) : "n/a"}</td><td>${s.home_health ? usd(s.home_health.median_cost_per_visit) : "n/a"}</td></tr>`).join("")}
+</tbody></table></div>${costDefs()}
+<h2>Not covered yet</h2><p>Assisted living and private-pay in-home care prices are not published in any public government dataset; commercial surveys are not reproduced here. Use the facility list for your state and ask each provider for its current daily rate.</p>${costSources(c)}`;
+  return page({ url: "/cost/", title: `Nursing home cost by state 2026: per day and per month | ${site.name}`, h1: "Nursing home cost by state",
+    description: `Median US nursing home cost ${usd(n.median_cost_per_day)} per day (${usd(n.median_cost_per_day * MONTH)}/month) from ${n.facilities.toLocaleString("en-US")} CMS cost reports, with state and metro medians, Medicaid daily rates and home health cost per visit.`,
+    crumbs: [["Nursing home cost", "/cost/"]], body,
+    jsonld: costLd("US nursing home cost per day by state", "/cost/", [["Median nursing home cost per resident day", n.median_cost_per_day], ["Median nursing home net revenue per resident day", n.median_revenue_per_day], ["Median nursing home charge per resident day", n.median_charge_per_day], ["Average Medicaid nursing facility base payment per day (2019)", n.medicaid.medicaid_base_payment_per_day], ["Median home health agency cost per visit", n.home_health.median_cost_per_visit]]) });
+}
+function costState(st) {
+  const c = costs(); const s = c.states[st]; const d = data();
+  if (!s || !s.facilities) return null;
+  const nh = (d.stateType.get(`${st}|Nursing home`) || []).map((r) => [r, c.facilities[r.fields["CMS Certification Number (CCN)"]]]).filter(([, f]) => f)
+    .sort((a, b) => a[1].cost_per_day - b[1].cost_per_day);
+  const mc = s.medicaid; const hh = s.home_health;
+  const body = `<p><strong>The median nursing home in ${esc(st)} spends ${usd(s.median_cost_per_day)} per resident day (about ${usd(s.median_cost_per_day * MONTH)} a month); its list charge is ${usd(s.median_charge_per_day)} per day (${usd(s.median_charge_per_day * MONTH)} a month).</strong>
+Median of ${s.facilities} facilities' CMS cost reports; national median ${usd(c.national.median_cost_per_day)} per day.
+${mc ? `${esc(st)} Medicaid paid nursing homes an average base rate of ${usd(mc.medicaid_base_payment_per_day, 2)} per day, ${Math.round(mc.payment_to_cost_ratio * 100)}% of the ${usd(mc.medicaid_cost_per_day, 2)} cost of care for Medicaid residents (MACPAC, 2019).` : `MACPAC did not report a Medicaid rate for ${esc(st)}.`}
+${hh ? `Home health agencies in ${esc(st)} spend a median ${usd(hh.median_cost_per_visit)} per visit (RN visit ${usd(hh.median_rn_visit_cost)}, home health aide visit ${usd(hh.median_aide_visit_cost)}; ${hh.agencies} agencies).` : ""}</p>
+<dl><dt>Cost per resident day</dt><dd>${usd(s.median_cost_per_day)}</dd><dt>Cost per month</dt><dd>${usd(s.median_cost_per_day * MONTH)}</dd><dt>Cost per year</dt><dd>${usd(s.median_cost_per_day * 365)}</dd>
+<dt>Net revenue per day</dt><dd>${usd(s.median_revenue_per_day)}</dd><dt>Charge per day (list)</dt><dd>${usd(s.median_charge_per_day)}</dd>
+<dt>Medicaid base rate per day</dt><dd>${mc ? usd(mc.medicaid_base_payment_per_day, 2) : "n/a"}</dd><dt>Home health cost per visit</dt><dd>${hh ? usd(hh.median_cost_per_visit) : "n/a"}</dd></dl>
+${s.metros.length ? `<h2>By metro area</h2><div class="wrap"><table><thead><tr><th>Area (CBSA)</th><th>Facilities</th><th>Cost per day</th><th>Cost per month</th><th>Charge per day</th></tr></thead><tbody>${s.metros.map((m) => `<tr><td>${esc(m.label)} (${esc(m.cbsa)})</td><td>${m.facilities}</td><td>${usd(m.median_cost_per_day)}</td><td>${usd(m.median_cost_per_day * MONTH)}</td><td>${usd(m.median_charge_per_day)}</td></tr>`).join("")}</tbody></table></div>` : ""}
+${nh.length ? `<h2>Cost per day at each nursing home in ${esc(st)}</h2><div class="wrap"><table><thead><tr><th>Nursing home</th><th>City</th><th>Cost per day</th><th>Charge per day</th><th>CMS rating</th></tr></thead><tbody>${nh.map(([r, f]) => `<tr><td><a href="${itemUrl(r)}">${esc(r.name)}</a></td><td>${esc(r.fields.City || "")}</td><td>${usd(f.cost_per_day)}</td><td>${usd(f.charge_per_day)}</td><td>${esc(r.fields["CMS overall star rating"] || "")}</td></tr>`).join("")}</tbody></table></div>` : ""}
+${costDefs()}<p class="chips"><a href="/cost/">Cost in every state</a><a href="${stateTypeUrl(st, "Nursing home")}">Nursing homes in ${esc(st)}</a><a href="${stateUrl(st)}">All care in ${esc(st)}</a></p>${costSources(c)}`;
+  return page({ url: costUrl(st), title: `Nursing home cost in ${st}: ${usd(s.median_cost_per_day)} per day, ${usd(s.median_cost_per_day * MONTH)} per month | ${site.name}`,
+    h1: `Nursing home cost in ${st}`, crumbs: [["Nursing home cost", "/cost/"], [st, costUrl(st)]], body,
+    description: `Nursing homes in ${st} cost a median ${usd(s.median_cost_per_day)} per day (${usd(s.median_cost_per_day * MONTH)}/month) across ${s.facilities} CMS cost reports${mc ? `; Medicaid pays ${usd(mc.medicaid_base_payment_per_day, 2)}/day` : ""}. Metro and per-facility costs.`,
+    jsonld: costLd(`Nursing home cost in ${st}`, costUrl(st), [[`Median nursing home cost per resident day in ${st}`, s.median_cost_per_day], [`Median nursing home charge per resident day in ${st}`, s.median_charge_per_day], [`Medicaid nursing facility base payment per day in ${st} (2019)`, mc && mc.medicaid_base_payment_per_day], [`Median home health cost per visit in ${st}`, hh && hh.median_cost_per_visit]]) });
+}
+
 // ---------- HTML ----------
 const GA4 = /^G-[A-Z0-9]{6,}$/.test(String(site.ga4_measurement_id || "")) ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${site.ga4_measurement_id}"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${site.ga4_measurement_id}');
@@ -84,7 +151,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : ""}<title>${esc(title)}</
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="${esc(site.name)}">
 ${ld.map((j) => `<script type="application/ld+json">${JSON.stringify(j).replace(/</g, "\\u003c")}</script>`).join("\n")}
 ${GA4}<style>${CSS}</style></head>
-<body><header><div class="in"><a href="/"><strong>${esc(site.name)}</strong></a><nav><a href="/">Home</a> · <a href="/about/">Sources &amp; updates</a></nav></div></header>
+<body><header><div class="in"><a href="/"><strong>${esc(site.name)}</strong></a><nav><a href="/">Home</a> · <a href="/cost/">Costs</a> · <a href="/about/">Sources &amp; updates</a></nav></div></header>
 <main>${crumbHtml}<h1>${esc(h1)}</h1>${body}</main>
 <footer>${esc(site.name)} (${esc(site.host)}) lists ${data().rows.length.toLocaleString("en-US")} US care facilities and providers from public directories. Each entry cites its source page and retrieval date.
 Not medical advice; confirm admission, coverage and availability with the facility.<br>Operated by <a href="${esc(site.operator_url)}">${esc(site.operator)}</a>.
@@ -133,6 +200,7 @@ function home(pageNo) {
   const d = data();
   const intro = `<p>${esc(site.description)}</p>
 <p><strong>${esc(site.answer.question)}</strong> Every entry shows the care type, city and state, and the values its source publishes: address, phone, CMS star ratings, staffing, certified beds and federal penalties for nursing homes; services for home health and hospice agencies; licensed beds for adult care homes.</p>
+<p><a href="/cost/">Nursing home cost by state</a>: cost per day and per month from CMS cost reports, Medicaid daily rates and home health cost per visit.</p>
 <h2>By type of care</h2>${chips(byCount(d.types).map(([t, rs]) => [plural(t), typeUrl(t), rs.length]))}
 <h2>By state</h2>${chips(sortedKeys(d.states).map((s) => [s, stateUrl(s), d.states.get(s).length]))}
 <h2>All facilities</h2>`;
@@ -163,6 +231,8 @@ function itemPage(r) {
     name: r.name, url: BASE + itemUrl(r), address: addr, telephone: f.Phone, sameAs: f["Official website"] || undefined,
     additionalProperty: Object.entries(f).filter(([k, v]) => !/^https?:/.test(v)).map(([k, v]) => ({ "@type": "PropertyValue", name: k, value: v })),
     subjectOf: { "@type": "WebPage", url: r.source_url, name: src.name } };
+  { const c = costs(); const fc = c && c.facilities[f["CMS Certification Number (CCN)"]];
+    if (fc) ld.additionalProperty.push({ "@type": "PropertyValue", name: "Cost per resident day (CMS cost report)", value: fc.cost_per_day, unitText: "USD" }, { "@type": "PropertyValue", name: "Charge per resident day (CMS cost report)", value: fc.charge_per_day, unitText: "USD" }); }
   const loc = [r.facets.city, r.facets.state && !r.facets.city ? r.facets.state : null].filter(Boolean).join("");
   const title = `${r.name}${loc ? ` – ${r.facets.type}, ${loc}` : ` – ${r.facets.type}`}`;
   const facts = [f["CMS overall star rating"] && `CMS overall rating ${f["CMS overall star rating"]}`, f["Certified beds"] && `${f["Certified beds"]} certified beds`, f.Phone && `phone ${f.Phone}`].filter(Boolean).join(", ");
@@ -175,10 +245,18 @@ function itemPage(r) {
     body: `<p>${esc(r.facets.type)}${loc ? ` in ${esc(loc)}` : ""}.${facts ? ` ${esc(facts[0].toUpperCase() + facts.slice(1))}.` : ""}</p>
 <dl>${dl}</dl>
 <p class="src">Source: <a href="${esc(r.source_url)}" rel="nofollow" data-outbound>${esc(src.name || r.source_url)}</a> (retrieved ${esc(r.updated_at.slice(0, 10))}). Source note: ${esc(r.summary)}</p>
-${r.facets.type === "Nursing home" ? `<p class="src">CMS star ratings run from 1 (much below average) to 5 (much above average). Fines and payment denials cover the trailing three years in the CMS Penalties file.</p>` : ""}
+${itemCost(r)}${r.facets.type === "Nursing home" ? `<p class="src">CMS star ratings run from 1 (much below average) to 5 (much above average). Fines and payment denials cover the trailing three years in the CMS Penalties file.</p>` : ""}
 <h2>Related lists</h2><p class="chips">${links.map(([l, u]) => `<a href="${esc(u)}">${esc(l)}</a>`).join("")}</p>
 ${peers.length ? `<h2>Other care in ${esc(r.facets.city)}</h2><div class="cards">${peers.map(card).join("")}</div>` : ""}
 ${sameType.length ? `<h2>More ${esc(plural(r.facets.type).toLowerCase())} in ${esc(r.facets.state)}</h2><div class="cards">${sameType.map(card).join("")}</div>` : ""}` });
+}
+
+function itemCost(r) {
+  const c = costs(); const f = c && c.facilities[(r.fields || {})["CMS Certification Number (CCN)"]];
+  if (!f) return "";
+  const st = c.states[r.facets.state];
+  return `<h2>Cost</h2><dl><dt>Cost per resident day</dt><dd>${usd(f.cost_per_day)} (about ${usd(f.cost_per_day * MONTH)} a month)</dd><dt>Net revenue per day</dt><dd>${usd(f.revenue_per_day)}</dd><dt>Charge per day (list)</dt><dd>${usd(f.charge_per_day)}</dd>${st ? `<dt>${esc(r.facets.state)} median cost per day</dt><dd>${usd(st.median_cost_per_day)}</dd>` : ""}</dl>
+<p class="src">From this facility's CMS Skilled Nursing Facility Cost Report for the fiscal year ending ${esc(f.fy_end)} (all payers, all rooms; not a quoted room rate). <a href="${costUrl(r.facets.state)}">Nursing home cost in ${esc(r.facets.state)}</a>.</p>`;
 }
 
 function about() {
@@ -206,12 +284,13 @@ function sitemapIndex() {
 const urlset = (urls, lastmod) => `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${BASE}${u}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`).join("")}</urlset>\n`;
 function listUrls() {
   const d = data();
-  return ["/", "/about/", ...sortedKeys(d.types).map(typeUrl), ...sortedKeys(d.states).map(stateUrl),
+  const c = costs();
+  return ["/", "/about/", ...(c ? ["/cost/", ...Object.keys(c.states).filter((s) => c.states[s].facilities).sort().map(costUrl)] : []), ...sortedKeys(d.types).map(typeUrl), ...sortedKeys(d.states).map(stateUrl),
     ...[...d.stateType.keys()].sort().map((k) => stateTypeUrl(...k.split("|"))), ...sortedKeys(d.cities).map(cityUrl)];
 }
 function llms() {
   const d = data();
-  return `# ${site.name}\n\n> ${site.description}\n\n${d.rows.length} entries across ${d.states.size} states and territories. Sources: ${site.sources.map((s) => s.name).join("; ")}. Operated by ${site.operator}.\n\n## Pages\n- [All facilities](${BASE}/)\n${byCount(d.types).map(([t, rs]) => `- [${plural(t)}](${BASE}${typeUrl(t)}): ${rs.length}`).join("\n")}\n- By state: ${BASE}/state/<state>/ and ${BASE}/state/<state>/<type>/ (for example ${BASE}/state/ohio/nursing-homes/)\n- By city: ${BASE}/city/<city>-<st>/ (for example ${BASE}/city/columbus-oh/)\n- Facility detail: ${BASE}/items/<slug>/\n- [Sources & updates](${BASE}/about/)\n\n## API\n- ${BASE}/api/items?limit=100&offset=0 (filters: type, state, city, q)\n- ${BASE}/api/collection-status\n- Sitemap: ${BASE}/sitemap.xml\n`;
+  return `# ${site.name}\n\n> ${site.description}\n\n${d.rows.length} entries across ${d.states.size} states and territories. Sources: ${site.sources.map((s) => s.name).join("; ")}. Operated by ${site.operator}.\n\n## Pages\n- [All facilities](${BASE}/)\n${byCount(d.types).map(([t, rs]) => `- [${plural(t)}](${BASE}${typeUrl(t)}): ${rs.length}`).join("\n")}\n- By state: ${BASE}/state/<state>/ and ${BASE}/state/<state>/<type>/ (for example ${BASE}/state/ohio/nursing-homes/)\n- By city: ${BASE}/city/<city>-<st>/ (for example ${BASE}/city/columbus-oh/)\n- Facility detail: ${BASE}/items/<slug>/\n- [Nursing home cost by state](${BASE}/cost/): cost per day and month, Medicaid daily rate, home health cost per visit; per state at ${BASE}/cost/<state>/ (for example ${BASE}/cost/ohio/)\n- [Sources & updates](${BASE}/about/)\n\n## API\n- ${BASE}/api/items?limit=100&offset=0 (filters: type, state, city, q)\n- ${BASE}/api/collection-status\n- Sitemap: ${BASE}/sitemap.xml\n`;
 }
 function robots() {
   return `# Training crawls are disallowed; search (including AI search) is allowed.\nUser-agent: GPTBot\nDisallow: /\n\nUser-agent: CCBot\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow: /\n\nUser-agent: Google-Extended\nDisallow: /\n\nUser-agent: *\nAllow: /\n\nSitemap: ${BASE}/sitemap.xml\n`;
@@ -250,6 +329,9 @@ function route(pathname, qs) {
   if (pathname === "/healthz") return json({ ok: true, total: d.rows.length });
   if (site.indexnow_key && pathname === `/${site.indexnow_key}.txt`) return txt(site.indexnow_key);
   if (pathname === "/about/") return html(about());
+  if (pathname === "/cost/" && costs()) return html(costHome());
+  m = pathname.match(/^\/cost\/([a-z0-9-]+)\/$/);
+  if (m && costs()) { const st = Object.keys(costs().states).find((x) => slugify(x) === m[1]); return st ? html(costState(st)) : null; }
   m = pathname.match(/^\/items\/([a-z0-9-]+)\/$/);
   if (m) { const r = d.bySlug.get(m[1]); return r ? html(itemPage(r)) : null; }
   // list pages with optional /page/N/

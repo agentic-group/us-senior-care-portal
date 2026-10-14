@@ -1,0 +1,254 @@
+{
+ "source": "MACPAC, Estimates of Medicaid Nursing Facility Payments Relative to Costs (January 2023), Table A-1, data year 2019",
+ "source_url": "https://www.macpac.gov/publication/estimates-of-medicaid-nursing-facility-payments-relative-to-costs/",
+ "pdf_url": "https://www.macpac.gov/wp-content/uploads/2023/01/Estimates-of-Medicaid-Nursing-Facility-Payments-Relative-to-Costs-1-6-23.pdf",
+ "retrieved": "2026-10-14",
+ "note": "Average Medicaid fee-for-service base payment per resident day (allowed amount in T-MSIS, includes resident share of cost, excludes supplemental payments). Alaska, Idaho and New Hampshire were excluded by MACPAC for data quality.",
+ "states": {
+  "National": {
+   "medicaid_base_payment_per_day": 200.39,
+   "medicaid_cost_per_day": 238.94,
+   "payment_to_cost_ratio": 0.84
+  },
+  "Alabama": {
+   "medicaid_base_payment_per_day": 204.6,
+   "medicaid_cost_per_day": 205.36,
+   "payment_to_cost_ratio": 1.0
+  },
+  "Arizona": {
+   "medicaid_base_payment_per_day": 209.32,
+   "medicaid_cost_per_day": 257.5,
+   "payment_to_cost_ratio": 0.81
+  },
+  "Arkansas": {
+   "medicaid_base_payment_per_day": 186.85,
+   "medicaid_cost_per_day": 198.41,
+   "payment_to_cost_ratio": 0.94
+  },
+  "California": {
+   "medicaid_base_payment_per_day": 225.53,
+   "medicaid_cost_per_day": 269.25,
+   "payment_to_cost_ratio": 0.84
+  },
+  "Colorado": {
+   "medicaid_base_payment_per_day": 227.42,
+   "medicaid_cost_per_day": 265.56,
+   "payment_to_cost_ratio": 0.86
+  },
+  "Connecticut": {
+   "medicaid_base_payment_per_day": 226.83,
+   "medicaid_cost_per_day": 278.34,
+   "payment_to_cost_ratio": 0.82
+  },
+  "Delaware": {
+   "medicaid_base_payment_per_day": 375.82,
+   "medicaid_cost_per_day": 290.39,
+   "payment_to_cost_ratio": 1.29
+  },
+  "District of Columbia": {
+   "medicaid_base_payment_per_day": 299.07,
+   "medicaid_cost_per_day": 305.04,
+   "payment_to_cost_ratio": 0.98
+  },
+  "Florida": {
+   "medicaid_base_payment_per_day": 184.31,
+   "medicaid_cost_per_day": 250.37,
+   "payment_to_cost_ratio": 0.74
+  },
+  "Georgia": {
+   "medicaid_base_payment_per_day": 187.66,
+   "medicaid_cost_per_day": 199.86,
+   "payment_to_cost_ratio": 0.94
+  },
+  "Hawaii": {
+   "medicaid_base_payment_per_day": 357.14,
+   "medicaid_cost_per_day": 309.72,
+   "payment_to_cost_ratio": 1.15
+  },
+  "Illinois": {
+   "medicaid_base_payment_per_day": 192.87,
+   "medicaid_cost_per_day": 213.7,
+   "payment_to_cost_ratio": 0.9
+  },
+  "Indiana": {
+   "medicaid_base_payment_per_day": 210.75,
+   "medicaid_cost_per_day": 238.78,
+   "payment_to_cost_ratio": 0.88
+  },
+  "Iowa": {
+   "medicaid_base_payment_per_day": 185.06,
+   "medicaid_cost_per_day": 206.15,
+   "payment_to_cost_ratio": 0.9
+  },
+  "Kansas": {
+   "medicaid_base_payment_per_day": 188.46,
+   "medicaid_cost_per_day": 209.02,
+   "payment_to_cost_ratio": 0.9
+  },
+  "Kentucky": {
+   "medicaid_base_payment_per_day": 195.17,
+   "medicaid_cost_per_day": 221.37,
+   "payment_to_cost_ratio": 0.88
+  },
+  "Louisiana": {
+   "medicaid_base_payment_per_day": 162.56,
+   "medicaid_cost_per_day": 180.55,
+   "payment_to_cost_ratio": 0.9
+  },
+  "Maine": {
+   "medicaid_base_payment_per_day": 247.74,
+   "medicaid_cost_per_day": 271.3,
+   "payment_to_cost_ratio": 0.91
+  },
+  "Maryland": {
+   "medicaid_base_payment_per_day": 263.69,
+   "medicaid_cost_per_day": 284.95,
+   "payment_to_cost_ratio": 0.93
+  },
+  "Massachusetts": {
+   "medicaid_base_payment_per_day": 209.87,
+   "medicaid_cost_per_day": 256.59,
+   "payment_to_cost_ratio": 0.82
+  },
+  "Michigan": {
+   "medicaid_base_payment_per_day": 208.49,
+   "medicaid_cost_per_day": 258.01,
+   "payment_to_cost_ratio": 0.81
+  },
+  "Minnesota": {
+   "medicaid_base_payment_per_day": 275.77,
+   "medicaid_cost_per_day": 288.62,
+   "payment_to_cost_ratio": 0.96
+  },
+  "Mississippi": {
+   "medicaid_base_payment_per_day": 202.65,
+   "medicaid_cost_per_day": 215.42,
+   "payment_to_cost_ratio": 0.94
+  },
+  "Missouri": {
+   "medicaid_base_payment_per_day": 161.24,
+   "medicaid_cost_per_day": 178.49,
+   "payment_to_cost_ratio": 0.9
+  },
+  "Montana": {
+   "medicaid_base_payment_per_day": 204.52,
+   "medicaid_cost_per_day": 244.31,
+   "payment_to_cost_ratio": 0.84
+  },
+  "Nebraska": {
+   "medicaid_base_payment_per_day": 129.53,
+   "medicaid_cost_per_day": 223.91,
+   "payment_to_cost_ratio": 0.58
+  },
+  "Nevada": {
+   "medicaid_base_payment_per_day": 151.89,
+   "medicaid_cost_per_day": 263.36,
+   "payment_to_cost_ratio": 0.58
+  },
+  "New Jersey": {
+   "medicaid_base_payment_per_day": 193.66,
+   "medicaid_cost_per_day": 268.08,
+   "payment_to_cost_ratio": 0.72
+  },
+  "New Mexico": {
+   "medicaid_base_payment_per_day": 198.46,
+   "medicaid_cost_per_day": 240.49,
+   "payment_to_cost_ratio": 0.83
+  },
+  "New York": {
+   "medicaid_base_payment_per_day": 228.81,
+   "medicaid_cost_per_day": 302.07,
+   "payment_to_cost_ratio": 0.76
+  },
+  "North Carolina": {
+   "medicaid_base_payment_per_day": 186.25,
+   "medicaid_cost_per_day": 208.07,
+   "payment_to_cost_ratio": 0.9
+  },
+  "North Dakota": {
+   "medicaid_base_payment_per_day": 282.42,
+   "medicaid_cost_per_day": 301.2,
+   "payment_to_cost_ratio": 0.94
+  },
+  "Ohio": {
+   "medicaid_base_payment_per_day": 196.72,
+   "medicaid_cost_per_day": 230.11,
+   "payment_to_cost_ratio": 0.86
+  },
+  "Oklahoma": {
+   "medicaid_base_payment_per_day": 153.03,
+   "medicaid_cost_per_day": 169.65,
+   "payment_to_cost_ratio": 0.9
+  },
+  "Oregon": {
+   "medicaid_base_payment_per_day": 354.36,
+   "medicaid_cost_per_day": 318.75,
+   "payment_to_cost_ratio": 1.11
+  },
+  "Pennsylvania": {
+   "medicaid_base_payment_per_day": 186.77,
+   "medicaid_cost_per_day": 254.67,
+   "payment_to_cost_ratio": 0.73
+  },
+  "Rhode Island": {
+   "medicaid_base_payment_per_day": 226.79,
+   "medicaid_cost_per_day": 252.59,
+   "payment_to_cost_ratio": 0.9
+  },
+  "South Carolina": {
+   "medicaid_base_payment_per_day": 158.5,
+   "medicaid_cost_per_day": 205.07,
+   "payment_to_cost_ratio": 0.77
+  },
+  "South Dakota": {
+   "medicaid_base_payment_per_day": 125.51,
+   "medicaid_cost_per_day": 209.02,
+   "payment_to_cost_ratio": 0.6
+  },
+  "Tennessee": {
+   "medicaid_base_payment_per_day": 203.33,
+   "medicaid_cost_per_day": 219.71,
+   "payment_to_cost_ratio": 0.93
+  },
+  "Texas": {
+   "medicaid_base_payment_per_day": 157.76,
+   "medicaid_cost_per_day": 195.28,
+   "payment_to_cost_ratio": 0.81
+  },
+  "Utah": {
+   "medicaid_base_payment_per_day": 201.73,
+   "medicaid_cost_per_day": 263.03,
+   "payment_to_cost_ratio": 0.77
+  },
+  "Vermont": {
+   "medicaid_base_payment_per_day": 244.82,
+   "medicaid_cost_per_day": 281.58,
+   "payment_to_cost_ratio": 0.87
+  },
+  "Virginia": {
+   "medicaid_base_payment_per_day": 196.19,
+   "medicaid_cost_per_day": 204.16,
+   "payment_to_cost_ratio": 0.96
+  },
+  "Washington": {
+   "medicaid_base_payment_per_day": 229.57,
+   "medicaid_cost_per_day": 285.65,
+   "payment_to_cost_ratio": 0.8
+  },
+  "West Virginia": {
+   "medicaid_base_payment_per_day": 305.83,
+   "medicaid_cost_per_day": 305.85,
+   "payment_to_cost_ratio": 1.0
+  },
+  "Wisconsin": {
+   "medicaid_base_payment_per_day": 185.85,
+   "medicaid_cost_per_day": 249.14,
+   "payment_to_cost_ratio": 0.75
+  },
+  "Wyoming": {
+   "medicaid_base_payment_per_day": 175.93,
+   "medicaid_cost_per_day": 254.82,
+   "payment_to_cost_ratio": 0.69
+  }
+ }
+}
